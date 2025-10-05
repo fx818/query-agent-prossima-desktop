@@ -54,24 +54,9 @@ def home():
     """Serve the index.html file as the root page."""
     return FileResponse(os.path.join(static_files_dir, 'index.html'))
 
-@app.post("/query")
-def handle_query(request: Request):
-    """Handle a user query."""
-    username= request.session.get("username", "anonymous")
-    user_query = request.session.get("user_query", None)
-    if not username:
-        return {"error": "No username found in session."}
-    if not user_query:
-        return {"error": "No user query found in session."}
-    print(f"User '{username}' query: {user_query}")
-    state = get_initial_state_for_user(username, user_query)
-    thread_config = get_user_thread_config(username)
-    agent = SQLAgent(config.DATA_DB_URI, config.MEMORY_DB_URI)
-    agent.graph.invoke(state, thread_config=thread_config)
-    return {"response": state.get("response", ""), "error": state.get("error", "")}
 
-@app.post("/testing_query")
-def test_handle_query(username: str, user_query: str):
+@app.post("/query")
+def handle_query(username: str, user_query: str):
     """Handle a user query."""
     if not username:
         return {"error": "No username found in session."}
