@@ -3,10 +3,12 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+
+database/*.db
+*.sqlite3
+
 # C extensions
 *.so
-
-database/*.sql
 
 # Distribution / packaging
 .Python
