@@ -49,8 +49,8 @@ class SQLAgent:
     def _call_llm(self, system_message: str, user_que: str):
         """Helper to call OpenRouter API and return response_text"""
         completion = self.llm.chat.completions.create(
-            # model="meta-llama/llama-4-scout",   # ✅ fixed model call
-            model="openai/gpt-4.1",
+            model="meta-llama/llama-4-scout:free",   # ✅ fixed model call
+            # model="openai/gpt-4.1",
             # model="qwen/qwen3-coder-plus",
             # model="x-ai/grok-code-fast-1",
             # model="anthropic/claude-sonnet-4.5",
@@ -332,6 +332,10 @@ class SQLAgent:
         )
 
         print(response_text)
+        state["response"] = response_text
+        memory = {state.get("user_query", ""): state.get("response", "")}
+        save_user_memory(state.get("username", ""), memory, "email")
+        print("Saved the user memory in the db")
         print()
         print()
         print()
@@ -796,22 +800,22 @@ class SQLAgent:
         builder.add_node("add_memory_context", self.add_memory_context)
         builder.add_node("resolve_user_query", self.resolve_user_query)
         builder.add_node("identify_tables", self.identify_tables)
-        builder.add_node("write_query", self.write_query)
-        builder.add_node("execute_query", self.execute_query)
-        builder.add_node("fix_query", self.fix_query)
-        builder.add_node("generate_answer", self.generate_answer)
+        # builder.add_node("write_query", self.write_query)
+        # builder.add_node("execute_query", self.execute_query)
+        # builder.add_node("fix_query", self.fix_query)
+        # builder.add_node("generate_answer", self.generate_answer)
 
         builder.add_edge("add_memory_context", "resolve_user_query")
         builder.add_edge("resolve_user_query", "identify_tables")
-        builder.add_edge("identify_tables", "write_query")
-        builder.add_edge("write_query", "execute_query")
+        # builder.add_edge("identify_tables", "write_query")
+        # builder.add_edge("write_query", "execute_query")
 
-        builder.add_conditional_edges(
-            "execute_query",
-            lambda state: "fix_query" if state.get("error") else "generate_answer",
-            {"fix_query": "fix_query", "generate_answer": "generate_answer"}
-        )
-        builder.add_edge("fix_query", "execute_query")
+        # builder.add_conditional_edges(
+        #     "execute_query",
+        #     lambda state: "fix_query" if state.get("error") else "generate_answer",
+        #     {"fix_query": "fix_query", "generate_answer": "generate_answer"}
+        # )
+        # builder.add_edge("fix_query", "execute_query")
 
         builder.set_entry_point("add_memory_context")
         return builder.compile()

@@ -196,6 +196,9 @@ def save_user_memory(username: str, memory: Dict, email: str):
         # Convert the dictionary to a JSON string
         prev_mem = get_user_memory(username)
         if prev_mem.get("status"):
+            while prev_mem.get("memory") and len(prev_mem.get("memory"))>20:
+                first_key = next(iter(prev_mem.get("memory")))
+                prev_mem.get("memory").pop(first_key)
             memory = {**prev_mem.get("memory", {}), **memory}
         else:
             memory = memory
@@ -210,6 +213,7 @@ def save_user_memory(username: str, memory: Dict, email: str):
         cursor.execute(command, (username, memory_json, email))
         conn.commit()
         conn.close()
+        print("User memory saved successfully.")
         return True
     except Exception as e:
         conn.close()
@@ -236,7 +240,7 @@ def get_user_memory(username: str) -> Dict:
     conn = sqlite3.connect(memory_db_path)
     cursor = conn.cursor()
     result = cursor.execute(f"SELECT memory, email FROM user_memory WHERE username = '{username}'").fetchall()
-    print("The result from get_user_memory is ", result)
+    # print("The result from get_user_memory is ", result)
     if result:
         memory, email = result[0]
         memory = json.loads(memory) if memory else {}
@@ -259,3 +263,7 @@ def create_user_memory_table():
     cursor.execute(command)
     conn.commit()
     conn.close()
+
+
+# mem = get_user_memory("anurag")
+# print("The memory is ", mem.get("memory"))

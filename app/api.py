@@ -49,7 +49,7 @@ static_files_dir = os.path.join(os.path.dirname(__file__), "static")
 def read_root():
     return {"status": "API is running well and good."}
 
-@app.get("/home")
+@app.get("/testing-beta-v1")
 def home():
     """Serve the index.html file as the root page."""
     return FileResponse(os.path.join(static_files_dir, 'index.html'))
