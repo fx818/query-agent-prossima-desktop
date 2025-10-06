@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from starlette.middleware.sessions import SessionMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os, sys, json, re
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -16,6 +17,18 @@ app = FastAPI()
 secret_key = os.getenv("SESSION_SECRET_KEY", "default_secret_key")
 app.add_middleware(SessionMiddleware, secret_key=secret_key)
 
+origins = [
+    "https://inspectioncall.vercel.app",  # your frontend
+    "http://localhost:8000",              # optional: local dev
+    "http://localhost:3000",              # optional: local dev
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,        # allow your frontend domain(s)
+    allow_credentials=True,       # allow cookies, sessions, etc.
+    allow_methods=["*"],          # allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],          # allow all headers
+)
 
 # ---------------- Helpers ----------------
 def sanitize_for_thread_id(s: str) -> str:
