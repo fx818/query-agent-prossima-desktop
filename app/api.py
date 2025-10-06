@@ -21,6 +21,7 @@ origins = [
     "https://inspectioncall.vercel.app",  # your frontend
     "http://localhost:8000",              # optional: local dev
     "http://localhost:3000",              # optional: local dev
+    "http://34.228.38.156",                  # optional: your server IP
 ]
 app.add_middleware(
     CORSMiddleware,
