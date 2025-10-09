@@ -49,7 +49,7 @@ class SQLAgent:
     def _call_llm(self, system_message: str, user_que: str):
         """Helper to call OpenRouter API and return response_text"""
         completion = self.llm.chat.completions.create(
-            model="meta-llama/llama-4-scout:free",   # ✅ fixed model call
+            model="meta-llama/llama-4-scout",   # ✅ fixed model call
             # model="openai/gpt-4.1",
             # model="qwen/qwen3-coder-plus",
             # model="x-ai/grok-code-fast-1",
@@ -66,7 +66,8 @@ class SQLAgent:
     def _call_llm_basic(self, system_message: str, user_que: str):
         """Helper to call OpenRouter API and return response_text"""
         completion = self.llm.chat.completions.create(
-            model="deepseek/deepseek-chat-v3.1:free",   # ✅ fixed model call
+            model="meta-llama/llama-4-scout",
+            # model="deepseek/deepseek-chat-v3.1",   # ✅ fixed model call
             # model="openai/gpt-4.1",
             # model="qwen/qwen3-coder-plus",
             # model="x-ai/grok-code-fast-1",
