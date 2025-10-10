@@ -26,7 +26,7 @@ class State(TypedDict):
     context: Optional[str]
     tables: Optional[list]
 
-print("The api is ", config.API_KEY)
+# print("The api is ", config.API_KEY)
 
 class SQLAgent:
     def __init__(self, data_db_uri: str, user_memory_db_uri: str):
@@ -84,7 +84,7 @@ class SQLAgent:
 
     def add_memory_context(self, state: State):
         username = state.get("username", "")
-        print("username is ", username)
+        # print("username is ", username)
         context = get_user_memory(username)
         if not context.get("status"):
             print("No prev context found")
@@ -322,18 +322,18 @@ class SQLAgent:
         if isinstance(response_json, dict):
             resolved_ques = response_json.get("resolved_ques", "")
         if not resolved_ques:
-            print("Dude, ques could not be resolved")
+            # print("Dude, ques could not be resolved")
             state["resolved_user_query"] = user_que
         else:
             state["resolved_user_query"] = resolved_ques
 
-        print("the resolved ques is ", resolved_ques)
+        # print("the resolved ques is ", resolved_ques)
         return state
 
     def identify_tables(self, state: State):
         user_que = state.get("user_query", "")
         if not user_que:
-            print("No question from user found")
+            # print("No question from user found")
             return
         system_message = """
             You are a STRICT Table Identifier Assistant.
@@ -531,7 +531,7 @@ class SQLAgent:
         if isinstance(response_json, dict):
             tables = response_json.get("tables", [])
         if not tables:
-            print("No relevant tables found")
+            # print("No relevant tables found")
             state["tables"] = []
         else:
             state["tables"] = tables
@@ -554,18 +554,14 @@ class SQLAgent:
             except Exception as e:
                 print(f"Error querying table '{table}': {e}")
 
-        print("the identified tables are ", tables)
-        print("########################################################################################################")
-        print("########################################################################################################")
-        print()
-        print()
-        # print("the table data is ", table_data)
-        print("########################################################################################################")
-        print("########################################################################################################")
-        print("########################################################################################################")
-        print()
+        # print("the identified tables are ", tables)
+        # print("########################################################################################################")
+        # print("########################################################################################################")
+        # print()
+        # print()
+        
 
-        # ✅ Changed: Generate NL answer with OpenRouter
+        # Changed: Generate NL answer with OpenRouter
         system_prompt = """
             You are an Expert SQL Assistant whose ONLY job is to convert structured database information into clear, natural, human-readable answers.
 
@@ -605,10 +601,11 @@ class SQLAgent:
             Be clear about limitations
             Never produce SQL, You must not output SQL code, table structures, or any technical commentary.
             You are a human-style explainer, not a SQL generator.
+            Ony give the answer, dont explain anything else
 
             RESPONSE FORMAT
             Your output must be in plain natural language only, with no JSON, code blocks, or metadata.
-            It should read like a sentence or short paragraph — the final conversational answer to the user.
+            It should read like a sentence or short paragraph — the final conversational answer to the user with no other explantion about the how the result was derived
 
             EXAMPLES
             
@@ -688,20 +685,20 @@ class SQLAgent:
             user_que
         )
 
-        print(response_text)
+        # print(response_text)
         state["response"] = response_text
         memory = {state.get("user_query", ""): state.get("response", "")}
         save_user_memory(state.get("username", ""), memory, "email")
-        print("Saved the user memory in the db")
-        print()
-        print()
-        print()
-        print("########################################################################################################")
-        print("########################################################################################################")
-        print("########################################################################################################")
-        print()
-        print()
-        print()
+        # print("Saved the user memory in the db")
+        # print()
+        # print()
+        # print()
+        # print("########################################################################################################")
+        # print("########################################################################################################")
+        # print("########################################################################################################")
+        # print()
+        # print()
+        # print()
         state["tables"].append(table_data)
         return state
 
@@ -937,11 +934,11 @@ class SQLAgent:
             ),
             user_que
         )
-        print()
-        print()
-        print()
-        print()
-        print("The raw response from llm is ", response_text)
+        # print()
+        # print()
+        # print()
+        # print()
+        # print("The raw response from llm is ", response_text)
         # Handle different response types
         # if hasattr(raw_response, 'content'):
         #     if isinstance(raw_response.content, str):
