@@ -4,6 +4,7 @@ load_dotenv()
 API_KEY=os.getenv("GROQ_API_KEY", "")
 OPENROUTER=os.getenv("OPENROUTER", "")
 DATA_DB_URI=os.getenv("DATA_DB_URI", "postgresql://postgres:fx818@localhost:5432/project_automation_local")
+# DATA_DB_URI=os.getenv("DATA_DB_URI", "postgresql://postgres:inspectiondb@project-automation-db.cqra4284yx2k.us-east-1.rds.amazonaws.com:5432/project_automation_db")
 MEMORY_DB_URI=os.getenv("MEMORY_DB_URI", "sqlite:///../database/user_memory.sqlite3")
 MEMORY_DB_PATH=os.getenv("MEMORY_DB_PATH", "../database/user_memory.sqlite3")
 

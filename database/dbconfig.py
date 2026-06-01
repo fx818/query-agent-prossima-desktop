@@ -196,7 +196,7 @@ def save_user_memory(username: str, memory: Dict, email: str):
         # Convert the dictionary to a JSON string
         prev_mem = get_user_memory(username)
         if prev_mem.get("status"):
-            while prev_mem.get("memory") and len(prev_mem.get("memory"))>10:
+            while prev_mem.get("memory") and len(prev_mem.get("memory"))>5:
                 first_key = next(iter(prev_mem.get("memory")))
                 prev_mem.get("memory").pop(first_key)
             memory = {**prev_mem.get("memory", {}), **memory}
